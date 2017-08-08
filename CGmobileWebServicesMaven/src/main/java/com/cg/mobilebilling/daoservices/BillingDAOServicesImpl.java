@@ -2,6 +2,11 @@ package com.cg.mobilebilling.daoservices;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
 import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
@@ -9,13 +14,18 @@ import com.cg.mobilebilling.beans.PostpaidAccount;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
 
-
+@Repository
 public class BillingDAOServicesImpl implements BillingDAOServices {
 
+
+@PersistenceContext
+private EntityManager em;
+
 	@Override
-	public int insertCustomer(Customer customer) throws BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return 0;
+	public Customer insertCustomer(Customer customer) throws BillingServicesDownException {
+		em.persist(customer);
+		 em.flush();
+		 return customer;
 	}
 
 	@Override

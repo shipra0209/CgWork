@@ -104,7 +104,6 @@
 			<groupId>org.hibernate.common</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
 			<version>4.0.5.Final</version>
-			<!-- <classifier>tests</classifier> -->
 		</dependency>
 
 		<dependency>
@@ -119,18 +118,11 @@
 			<version>4.3.10.Final</version>
 		</dependency>
 
-		<!-- 4.3.10.Final
-		5.2.3.Final -->
-
-		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.2.3</version>
 		</dependency>
-	
-		<!-- ojdbc6 -->
-		
 
 		<dependency>
 			<groupId>org.jboss.logging</groupId>

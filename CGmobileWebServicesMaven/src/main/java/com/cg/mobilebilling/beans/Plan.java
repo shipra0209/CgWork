@@ -1,4 +1,8 @@
 package com.cg.mobilebilling.beans;
+
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Plan {
 	private int planID, monthlyRental, freeLocalCalls, freeStdCalls, freeLocalSMS, freeStdSMS, freeInternetDataUsageUnits;
 	private float localCallRate, stdCallRate, localSMSRate, stdSMSRate, internetDataUsageRate;

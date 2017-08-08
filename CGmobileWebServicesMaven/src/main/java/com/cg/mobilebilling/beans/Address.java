@@ -1,4 +1,8 @@
 package com.cg.mobilebilling.beans;
+
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Address {
 	private int pinCode;
 	private String city, state;

@@ -76,6 +76,15 @@ public class Customer {
 	}
 
 
+	
+
+
+	public Customer(int customerID) {
+		super();
+		this.customerID = customerID;
+	}
+
+
 	public int getCustomerID() {
 		return customerID;
 	}

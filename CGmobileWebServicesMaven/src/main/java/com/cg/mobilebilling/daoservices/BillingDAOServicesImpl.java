@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,7 @@ import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
 import com.cg.mobilebilling.beans.PostpaidAccount;
+import com.cg.mobilebilling.beans.StandardPlan;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
 
@@ -27,24 +29,78 @@ private EntityManager em;
 		 em.flush();
 		 return customer;
 	}
-
+	
 	@Override
-	public long insertPostPaidAccount(int customerID, PostpaidAccount account) {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<Customer> getAllCustomers() {
+		TypedQuery<Customer> query = em.createQuery("select c from Customer c",Customer.class);
+
+		return query.getResultList(); 
 	}
+	
+	@Override
+	public Customer getCustomer(int customerID) {
+		Customer customer = em.find(Customer.class,customerID);
+		return customer;
+	}
+	
 
 	@Override
-	public boolean updatePostPaidAccount(int customerID, PostpaidAccount account) {
-		// TODO Auto-generated method stub
+	public boolean deleteCustomer(int customerID) {
+		em.remove(getCustomer(customerID));
+		return true;
+	}
+	@Override
+	public PostpaidAccount insertPostPaidAccount(int customerID, PostpaidAccount account) {
+		Customer customer=em.find(Customer.class,customerID);
+				account.setCustomer(customer);
+				em.persist(account);
+				customer.setPostpaidAccounts(account);
+				return account; 
+
+	}
+	@Override
+	public PostpaidAccount getCustomerPostPaidAccount(int customerID, long mobileNo) {
+		PostpaidAccount postpaidAccount= em.find(PostpaidAccount.class, mobileNo);
+		return postpaidAccount;
+	}
+	/*@Override
+	public boolean deletePostPaidAccount(int customerID, PostpaidAccount account) {
+		Customer customer=em.find(Customer.class,customerID);
+		//account.setCustomer(customer);
+		em.remove(getCustomerPostPaidAccount(customerID, account);
 		return false;
+	}*/
+	
+	@Override
+	public StandardPlan insertStdPlan(StandardPlan standardPlan) {
+		em.persist(standardPlan);
+		em.flush();
+		return standardPlan;
+	}
+	
+
+	@Override
+	public StandardPlan getStdPlan(int planID) {
+		StandardPlan standardPlan=em.find(StandardPlan.class, planID);
+		return standardPlan;
 	}
 
 	@Override
-	public int insertMonthlybill(int customerID, long mobileNo, Bill bill) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Bill insertMonthlybill(int customerID, long mobileNo, Bill bill) {
+			PostpaidAccount paccount=em.find(PostpaidAccount.class, mobileNo);
+			bill.setPostpaidaccount(paccount);
+			em.persist(bill);
+			paccount.setBills(bill);
+			return bill;
 	}
+
+
+	@Override
+	public PostpaidAccount updatePostPaidAccount(int customerID, PostpaidAccount account) {
+		PostpaidAccount acc=em.merge(account);
+		return acc;
+	}
+
 
 	@Override
 	public int insertPlan(Plan plan) throws PlanDetailsNotFoundException {
@@ -52,11 +108,7 @@ private EntityManager em;
 		return 0;
 	}
 
-	@Override
-	public boolean deletePostPaidAccount(int customerID, long mobileNo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 
 	@Override
 	public Bill getMonthlyBill(int customerID, long mobileNo, String billMonth) {
@@ -76,17 +128,9 @@ private EntityManager em;
 		return null;
 	}
 
-	@Override
-	public Customer getCustomer(int customerID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
-	@Override
-	public List<Customer> getAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public List<Plan> getAllPlans() {
@@ -100,11 +144,7 @@ private EntityManager em;
 		return null;
 	}
 
-	@Override
-	public PostpaidAccount getCustomerPostPaidAccount(int customerID, long mobileNo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public Plan getPlanDetails(int customerID, long mobileNo) {
@@ -113,9 +153,11 @@ private EntityManager em;
 	}
 
 	@Override
-	public boolean deleteCustomer(int customerID) {
+	public boolean deletePostPaidAccount(int customerID, PostpaidAccount account) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
+
+
 }
